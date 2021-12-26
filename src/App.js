@@ -18,18 +18,28 @@ function App() {
   async function getUserInfo(uid) {
     const docuRef = doc(firestore, `users/${uid}`)
     const firestoreUserData = await getDoc(docuRef)
-    console.log(firestoreUserData)
     const userRole = firestoreUserData.data().role
-    return userRole
+    const userCustomer = firestoreUserData.data().cid
+    const customerDoc = await getDoc(userCustomer)
+    return {
+      role: userRole,
+      cid: customerDoc.id,
+      customer: customerDoc.data().name,
+      customerLogo: customerDoc.data().logo,
+    }
   }
 
   function setUserInfoWithFirebaseAndFirestore(firebaseUser) {
-    getUserInfo(firebaseUser.uid).then((role) => {
+    getUserInfo(firebaseUser.uid).then((info) => {
       const userData = {
         uid: firebaseUser.uid,
         email: firebaseUser.email,
-        role: role,
+        role: info.role,
+        cid: info.cid,
+        customer: info.customer,
+        customerLogo: info.customerLogo,
       }
+      console.log(userData)
       setUser(userData)
     })
   }
@@ -46,13 +56,6 @@ function App() {
   }, [])
   return (
     <>
-      <Router>
-        <Routes>
-          <Route path='/about' element={Home}></Route>
-          <Route path='/users' element={AdminView}></Route>
-          <Route path='/' element={Home}></Route>
-        </Routes>
-      </Router>
       {user ? (
         <UserContext.Provider value={user}>
           <Home />
