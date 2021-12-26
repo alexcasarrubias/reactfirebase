@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-//Importamos la aplicación/credenciales
 import firebaseApp from './firebase/credenciales'
 import Home from './screens/Home'
 import Login from './screens/Login'
@@ -7,9 +6,6 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { getFirestore, doc, getDoc } from 'firebase/firestore'
 
 import { UserContext } from './contexts/UserContext'
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
-// Conforme se necesite, importar los demás servicios y funciones. Por ejemplo:
-import AdminView from './components/AdminView'
 const auth = getAuth(firebaseApp)
 const firestore = getFirestore(firebaseApp)
 
@@ -39,7 +35,6 @@ function App() {
         customer: info.customer,
         customerLogo: info.customerLogo,
       }
-      console.log(userData)
       setUser(userData)
     })
   }
